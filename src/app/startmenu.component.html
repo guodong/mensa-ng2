@@ -1,0 +1,25 @@
+
+<img (click)="onStartClick()" class="start-logo" src="/assets/images/win7-start-btn.png">
+<div *ngIf="active" class="startpopup">
+    <div class="applications">
+        <ul id="app-list">
+
+        </ul>
+
+        <div class="search">
+            <form action="">
+                <input type="text" placeholder="Search programs and files">
+            </form>
+        </div>
+    </div>
+
+    <ul class="sysdir">
+        <li class="user"><div class="frame" style="z-index: 43;">
+            <div class="frame-inner" style="z-index: 9;">
+                <!--<img src="/assets/images/logo_default_430x430.jpg" style="width: 35px;">-->
+            </div>
+        </div>
+        </li>
+        <li><a href="#"><span>Documents</span></a></li>
+    </ul>
+</div>

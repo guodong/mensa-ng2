@@ -1,0 +1,5 @@
+<window *ngFor="let window of windows" [window]="window" [style.width]="window.width+'px'" [style.height]="window.height+'px'"
+[style.left]="window.x+'px'" [style.top]="window.y+'px'" [style.display]="window.visible?'block':'none'"></window>
+
+<desktop-icon-list></desktop-icon-list>
+<taskbar (notify)='onStartmenuClick($event)'></taskbar>
