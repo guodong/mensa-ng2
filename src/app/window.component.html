@@ -4,9 +4,9 @@
     <div class="top-row">
         <div class="top">
             <div class="buttons">
-                <div class="close">✖</div>
-                <div class="maximize">□</div>
-                <div class="minimize">-</div>
+                <div class="close" (click)="close()">✖</div>
+                <div class="maximize" (click)="toggleMaximize()">□</div>
+                <div class="minimize" (click)="minimize()">-</div>
             </div>
             <div class="title">{{window.title}}</div>
         </div>

@@ -1,5 +1,9 @@
-<window *ngFor="let window of windows" [window]="window" [style.width]="window.width+'px'" [style.height]="window.height+'px'"
-[style.left]="window.x+'px'" [style.top]="window.y+'px'" [style.display]="window.visible?'block':'none'"></window>
+<window *ngFor="let window of windows" id="wd-{{window.id}}" [window]="window" [style.width]="window.width+'px'" [style.height]="window.height+'px'"
+[style.left]="window.x+'px'" [style.top]="window.y+'px'" [style.display]="window.visible?'block':'none'" [style.zIndex]="window.zIndex" (click)="active(window)"></window>
 
-<desktop-icon-list></desktop-icon-list>
+<ul>
+    <li *ngFor="let app of apps">
+        <desktop-icon-item [app]="app"></desktop-icon-item>
+    </li>
+</ul>
 <taskbar (notify)='onStartmenuClick($event)'></taskbar>

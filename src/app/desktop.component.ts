@@ -1,28 +1,30 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Window } from './window';
 import { WmService } from './wm.service';
+import {ProcessManagerService} from './process-manager.service';
+import {App} from "./app";
+import {RegistryService} from "./registry.service";
 
 @Component({
   selector: 'desktop',
   templateUrl: './desktop.component.html',
-  styleUrls: ['./desktop.component.css'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./desktop.component.css']
 })
 export class DesktopComponent implements OnInit {
   @Input()
   windows: Window[];
-  constructor(private wmService: WmService) {}
+  
+  apps: App[] = [];
+  constructor(private wmService: WmService, private pmService: ProcessManagerService, private registryService: RegistryService) {}
 
   ngOnInit(): void {
     this.wmService.getWindows().then(windows => this.windows = windows);
-    // this.wmService.createWindow({
-    //   x: '100',
-    //   y: '100',
-    //   width: '200',
-    //   height: '200',
-    //   title: 'abc',
-    //   content: 'haha'
-    // });
+    this.apps = this.registryService.getApps();
+  }
+  
+  active(window: Window) {
+    this.wmService.activeWindow(window);
+    this.pmService.activeProcess(window.process);
   }
 
 }

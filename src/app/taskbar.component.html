@@ -1,2 +1,12 @@
 <startmenu></startmenu>
-<div class="datetime" style="display: block;float: right;"></div>
+
+<ul class="icons">
+    <li *ngFor="let process of processes">
+        <taskbar-icon-item [process]="process"></taskbar-icon-item>
+    </li>
+</ul>
+
+<div class="datetime" style="display: block;float: right;">
+    <div>{{time}}</div>
+    <div>{{date}}</div>
+</div>

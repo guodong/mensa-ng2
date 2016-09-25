@@ -23,6 +23,7 @@
     "zone.js": "^0.6.23"
   },
   "devDependencies": {
+    "angular2-jsonapi": "^3.1.1",
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^2.2.4",
     "css-loader": "^0.23.1",
@@ -30,6 +31,7 @@
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.15.0",
+    "interact.js": "^1.2.6",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-jasmine": "^1.0.2",

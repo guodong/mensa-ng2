@@ -3,7 +3,7 @@
 <div *ngIf="active" class="startpopup">
     <div class="applications">
         <ul id="app-list">
-
+            <li *ngFor="let version of versions" (click)="run(version)"><a href="#"><img src="//apiv2.cloudwarehub.com/uploads/{{version.cloudware.logo}}" alt="">{{version.cloudware.name}}</a></li>
         </ul>
 
         <div class="search">

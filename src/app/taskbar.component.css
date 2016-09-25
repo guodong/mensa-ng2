@@ -11,3 +11,18 @@
     border-top: 1px solid rgba(0, 0, 0, 0.5);
     box-shadow: inset 0 1px 0px rgba(255, 255, 255, 0.4);
 }
+.datetime {
+    width: 70px;
+    display: block;
+    float: right;
+    color: white;
+    text-align: center;
+    padding: 5px;
+}
+.icons {
+    margin-left: 50px;
+}
+.icons li {
+    display: block;
+    float: left;
+}

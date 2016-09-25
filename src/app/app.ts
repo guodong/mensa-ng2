@@ -3,6 +3,8 @@ export class App {
   url: string;
   type: string;
   config: any;
+  logo: string;
+  name: string;
   
   constructor(args: any) {
     for (var i in args) {

@@ -12,8 +12,20 @@ export class ProcessManagerService {
   constructor(private wmService: WmService) {
     this.zone = new NgZone({enableLongStackTrace: false});
   }
+  
+  getProcesses() {
+    return this.processes;
+  }
+
+  activeProcess(process: Process) {
+    this.processes.forEach((proc: Process) => {
+      proc.active = false;
+    });
+    process.active = true;
+  }
 
   run(app: App) {
+    var me = this;
     if (app.type == 'cloudware') {
       // var process = new Process({
       //   pid: pid++,
@@ -37,69 +49,83 @@ export class ProcessManagerService {
         app: app
       });
       this.processes.push(process);
-      var makeReply = function (req: any, payload: any) {
-        var data = {
-          seq: req.seq,
-          payload: payload
-        };
-        process.worker.postMessage(data);
-      };
-      var me = this;
-      var t = function () {
-        me.wmService.createWindow({
-          x: '100',
-          y: '100',
-          width: '200',
-          height: '200',
-          title: 'abc',
-          content: 'haha'
-        });
+
+      this.activeProcess(process);
+
+      process.worker.onmessage = function (msg: any) {
+        return me.handleMessage(msg, process);
       }
-      process.worker.onmessage = function (msg) {
-        // if (me.mask) {
-        //   me.mask.hide();
-        //   me.mask.destroy();
-        //   me.mask = null;
-        // }
-        var request = msg.data;
-        var resource = request.resource,
-          action = request.action,
-          payload = request.payload;
-        switch (resource) {
+    }
+  }
 
 
-          case 'window':
-            switch (action) {
-              case 'create':
-                var opts = {
-                  title: payload.title || 'window',
-                  x: payload.x || 0,
-                  y: payload.y || 0,
-                  width: payload.width || 300,
-                  height: payload.height || 200,
-                  content: payload.content || '',
-                  process: process,
-                  type: payload.type || 'normal',
-                  bare: payload.bare || false
-                };
-                me.zone.run(() => {
-                  me.wmService.createWindow(opts).then(window => {
-                    makeReply(request, window.id);
-                  });
+  private handleMessage(msg: any, process: Process) {
+    var makeReply = function (req: any, payload: any) {
+      var data = {
+        seq: req.seq,
+        payload: payload
+      };
+      process.worker.postMessage(data);
+    };
+    var request = msg.data;
+    var resource = request.resource,
+      action = request.action,
+      payload = request.payload;
+    switch (resource) {
+
+      case 'app':
+        switch (action) {
+          case 'info':
+            makeReply(request, process.app.config);
+            break;
+          case 'exit':
+            process.windows.forEach(function(window) {
+              window.destroy();
+            });
+            for (var i in this.processes) {
+              if (this.processes[i] == process) {
+                this.zone.run(() => {
+                  this.processes.splice(parseInt(i), 1);
                 });
                 break;
-              case 'show':
-                var window = me.wmService.getWindowById(payload);
-                if (window) {
-                  me.zone.run(() => {
-                    me.wmService.showWindow(window);
-                  });
-                }
-                break;
+              }
+            }
+            //noinspection TypeScriptUnresolvedVariable
+            document.getElementsByTagName('body')[0].style.cursor = 'default';
+            break;
+        }
+        break;
+      case 'window':
+        switch (action) {
+          case 'create':
+            var opts = {
+              title: payload.title || 'window',
+              x: payload.x || 0,
+              y: payload.y || 0,
+              width: payload.width || 300,
+              height: payload.height || 200,
+              content: payload.content || '',
+              process: process,
+              type: payload.type || 'normal',
+              bare: payload.bare || false
+            };
+            this.zone.run(() => {
+              this.wmService.createWindow(opts).then(window => {
+                process.windows.push(window);
+                makeReply(request, window.id);
+              });
+            });
+            break;
+          case 'show':
+            var window = this.wmService.getWindowById(payload);
+            if (window) {
+              this.zone.run(() => {
+                this.wmService.showWindow(window);
+              });
             }
             break;
         }
-      }
+        break;
     }
   }
 
