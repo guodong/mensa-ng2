@@ -5,4 +5,6 @@ if (process.env.ENV === 'production') {
   enableProdMode();
 }
 //noinspection TypeScriptValidateTypes
-platformBrowserDynamic().bootstrapModule(AppModule);
+
+
+var t = setTimeout(function() { platformBrowserDynamic().bootstrapModule(AppModule); clearTimeout(t)}, 5000);
