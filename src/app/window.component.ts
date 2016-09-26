@@ -1,4 +1,4 @@
-import {Component, Input, AfterViewChecked} from '@angular/core';
+import {Component, Input, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
 import {Window} from './window';
 import {WmService} from './wm.service';
 import * as interact from 'interact.js';
@@ -8,15 +8,34 @@ import * as interact from 'interact.js';
   templateUrl: './window.component.html',
   styleUrls: ['./window.component.css']
 })
-export class WindowComponent implements AfterViewChecked {
+export class WindowComponent implements AfterViewInit {
   @Input()
   window: Window;
+
+  @ViewChild('canvas') cvs: ElementRef;
+  
+  canvas: any;
+  imageData: any;
 
   constructor(private wmService: WmService) {
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewInit() {
     var me = this;
+    if (this.window.type == 'cloudware') {
+
+      this.canvas = this.cvs.nativeElement;
+      this.window.canvas = this.canvas;
+      this.canvas.width = 1;
+      this.canvas.height = 1;
+
+      var canvas = this.canvas;
+      canvas.width = 1;
+      canvas.height = 1;
+      if (this.window.width != 0 && this.window.height != 0)
+        this.imageData = canvas.getContext('2d').createImageData(this.window.width, this.window.height);
+    }
+    
     interact('#wd-' + this.window.id + ' .top').draggable({
       onmove: function(event: any) {
         var target = event.target.parentNode.parentNode.parentNode, x = (parseFloat(target.style.left) || 0) + event.dx, y = (parseFloat(target.style.top) || 0) + event.dy;

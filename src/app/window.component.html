@@ -1,12 +1,12 @@
 
 
-<div class="window-layout">
+<div class="window-layout" *ngIf="!window.bare">
     <div class="top-row">
         <div class="top">
             <div class="buttons">
                 <div class="close" (click)="close()">✖</div>
-                <div class="maximize" (click)="toggleMaximize()">□</div>
-                <div class="minimize" (click)="minimize()">-</div>
+                <div class="maximize" *ngIf="window.maximizable" (click)="toggleMaximize()">□</div>
+                <div class="minimize" *ngIf="window.minimizable" (click)="minimize()">-</div>
             </div>
             <div class="title">{{window.title}}</div>
         </div>
@@ -17,3 +17,5 @@
     </div>
 
 </div>
+
+<canvas #canvas *ngIf="window.bare" width="1" height="1"></canvas>

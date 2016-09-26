@@ -19,14 +19,16 @@ export class WmService {
     return Promise.resolve(window);
   }
 
-  showWindow(window: Window) {
+  showWindow(window: Window): Promise<Window> {
     window.visible = true;
+    return Promise.resolve(window);
   }
 
   destroyWindow(window: Window) {
     for (var i in this.windows) {
       if (window == this.windows[i]) {
-        this.windows[i].process.worker.postMessage({msg: 'destroy', payload: this.windows[i].id});
+        if (this.windows[i].process)
+          this.windows[i].process.worker.postMessage({msg: 'destroy', payload: this.windows[i].id});
         this.windows.splice(parseInt(i), 1);
         break;
       }

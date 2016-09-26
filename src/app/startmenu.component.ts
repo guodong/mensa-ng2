@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 import {DatastoreService} from "./datastore.service";
 import {Version} from "./models";
 import {AppManagerService} from "./app-manager.service";
+import {ProcessManagerService} from "./process-manager.service";
 
 @Component({
   selector: 'startmenu',
@@ -15,7 +16,8 @@ export class StartmenuComponent implements OnInit {
   active: boolean;
   versions: Version[];
 
-  constructor(private _eref: ElementRef, private dsService: DatastoreService, private amService: AppManagerService) {
+  constructor(private _eref: ElementRef, private dsService: DatastoreService, private amService: AppManagerService,
+  private pmService: ProcessManagerService) {
   }
 
   ngOnInit() {
@@ -35,7 +37,7 @@ export class StartmenuComponent implements OnInit {
   }
   
   run(version: Version) {
-    this.amService.installCloudwareVersion(version);
+    this.amService.installCloudwareVersion(version).then(app => this.pmService.run(app));
     this.active = false;
   }
 }

@@ -1,24 +1,36 @@
 
 export class Window {
   id: any;
-  content: string;
+  content: any;
   x: number;
   y: number;
   width: number;
   height: number;
   visible: boolean;
+  bare: boolean = false;
   oldGeo: any;
   process: any;
   isMaximized: boolean = false;
   isMinimized: boolean = false;
   zIndex: number;
+  startRender: boolean = true;
+  renderCheckHandle: any;
+  type: string = 'normal';
+  canvas: any;
+  minimizable: boolean = true;
+  maximizable: boolean = true;
   
   constructor(args: any) {
     this.visible = false;
     for (var i in args) {
       this[i] = args[i];
     }
-    
+
+    /* create canvas */
+    if (this.type == 'cloudware') {
+    }
+    this.startRender = true;
+    this.renderCheckHandle = null;
   }
 
   maximize() {
@@ -55,7 +67,26 @@ export class Window {
     this.visible = true;
   }
 
-  destroy() {
+  configure(styles: any) {
+    var self = this;
+    var setStartRender = function() {
+      self.startRender = true;
+      clearTimeout(self.renderCheckHandle);
+    }
+    this.startRender = false;
+    clearTimeout(this.renderCheckHandle);
+    this.renderCheckHandle = setTimeout(setStartRender, 600);
+    this.x = styles.left;
+    this.y = styles.top;
+    this.width = styles.width;
+    this.height = styles.height;
+  }
 
+  hide() {
+    this.visible = false;
+  }
+
+  destroy() {
+    
   }
 }

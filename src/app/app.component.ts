@@ -9,7 +9,7 @@ import './../../assets/styles/styles.css';
 })
 export class AppComponent {
   constructor(private appManagerService: AppManagerService) {
-    this.appManagerService.install('//localhost:8888/about');
+    this.appManagerService.install('/apps/about').then(app => console.log(app));
   }
   
   

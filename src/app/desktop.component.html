@@ -1,4 +1,4 @@
-<window *ngFor="let window of windows" id="wd-{{window.id}}" [window]="window" [style.width]="window.width+'px'" [style.height]="window.height+'px'"
+<window *ngFor="let window of windows" id="wd-{{window.id}}" [window]="window" [class.bare]="window.bare" [style.width]="window.width+'px'" [style.height]="window.height+'px'"
 [style.left]="window.x+'px'" [style.top]="window.y+'px'" [style.display]="window.visible?'block':'none'" [style.zIndex]="window.zIndex" (click)="active(window)"></window>
 
 <ul>

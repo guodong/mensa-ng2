@@ -5,6 +5,7 @@ export class App {
   config: any;
   logo: string;
   name: string;
+  entry: string;
   
   constructor(args: any) {
     for (var i in args) {

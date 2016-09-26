@@ -31,7 +31,7 @@ export class Process {
 
     var worker = this.worker = new Worker('/assets/js/loader.js');
 
-    worker.postMessage({entry: this.app.url + '/' + this.app.config.entry, version_id: this.app.config.id});
+    worker.postMessage({entry: this.app.entry, version_id: this.app.config.id});
     
   }
 }

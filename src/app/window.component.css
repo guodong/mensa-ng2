@@ -6,8 +6,11 @@
     width: 850px;
     height: 506px;
     border: solid 1px #619bb9;
-    overflow: visible;
+    overflow: hidden;
     display: inline-block;
+}
+:host.bare {
+    border: 0;
 }
 .window-layout {
     display: table;

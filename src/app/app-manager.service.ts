@@ -17,7 +17,7 @@ export class AppManagerService {
       }
     }
 
-    this.http.get(url + '/mensa.json').toPromise().then(res => {
+    return this.http.get(url + '/mensa.json').toPromise().then(res => {
       var appconfig = res.json();
       var uuid = Math.random();
       var app = new App({
@@ -25,14 +25,15 @@ export class AppManagerService {
         url: url,
         name: appconfig.name,
         config: appconfig,
-        logo: url + '/' + 'icon.png'
+        logo: url + '/' + 'icon.png',
+        entry: url + '/' + appconfig.entry
       });
       this.registryService.addApp(app);
-
+      return Promise.resolve(app);
     }).catch(this.handleError);
   }
 
-  installCloudwareVersion(version: Version) {
+  installCloudwareVersion(version: Version): Promise<App> {
     var apps = this.registryService.getApps();
     for (var i in apps) {
       if (apps[i].id === version.id) {
@@ -45,9 +46,11 @@ export class AppManagerService {
       config: version,
       name: version.cloudware.name,
       type: 'cloudware',
-      logo: 'http://apiv2.cloudwarehub.com/uploads/' + version.cloudware.logo
+      logo: 'http://apiv2.cloudwarehub.com/uploads/' + version.cloudware.logo,
+      entry: '/assets/js/cloudware.js'
     });
     this.registryService.addApp(app);
+    return Promise.resolve(app);
   }
 
   private handleError(error: any): Promise<any> {
