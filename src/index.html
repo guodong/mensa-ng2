@@ -22,6 +22,9 @@
 
     function draw() {
         var canvas = document.getElementById('canvas');
+        if (!canvas) {
+            return;
+        }
         //canvas.style.backgroundColor = 'rgba(255, 255, 255, 1)';
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0,0,300,300);
