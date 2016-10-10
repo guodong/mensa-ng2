@@ -1,7 +1,24 @@
-import {Component, Input, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, Input, AfterViewInit, ViewChild, ElementRef, PipeTransform, Pipe} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import {Window} from './window';
 import {WmService} from './wm.service';
 import * as interact from 'interact.js';
+
+@Pipe({name: 'safeHtml'})
+export class SafeHtmlPipe implements PipeTransform {
+  constructor(private sanitized: DomSanitizer) {}
+  transform(value: any) {
+    return this.sanitized.bypassSecurityTrustHtml(value);
+  }
+}
+
+@Pipe({ name: 'safeUrl' })
+export class SafeUrlPipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) {}
+  transform(url: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+}
 
 @Component({
   selector: 'window',

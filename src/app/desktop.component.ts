@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Window } from './window';
-import { WmService } from './wm.service';
+import {Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Window} from './window';
+import {WmService} from './wm.service';
 import {ProcessManagerService} from './process-manager.service';
 import {App} from "./app";
 import {RegistryService} from "./registry.service";
+import {Process} from './process';
 
 @Component({
   selector: 'desktop',
@@ -13,9 +14,13 @@ import {RegistryService} from "./registry.service";
 export class DesktopComponent implements OnInit {
   @Input()
   windows: Window[];
-  
+
+  processes: Process[];
+
   apps: App[] = [];
-  constructor(private wmService: WmService, private pmService: ProcessManagerService, private registryService: RegistryService) {}
+
+  constructor(private wmService: WmService, private pmService: ProcessManagerService, private registryService: RegistryService) {
+  }
 
   ngOnInit(): void {
     var me = this;
@@ -85,7 +90,7 @@ export class DesktopComponent implements OnInit {
       });
     };
   }
-  
+
   active(window: Window) {
     this.wmService.activeWindow(window);
     if (window.process)

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .main-login .box-forgot, .main-login .box-login, .main-login .box-register {
+            background: #FFF;
+            border-radius:5px;
+            overflow:hidden;
+            padding: 15px;
+        }
+
+        .main-login .form fieldset {
+            border: none;
+            margin: 0;
+            padding: 10px 0 0
+        }
+
+        .main-login a.forgot {
+            color: #909090;
+            font-size: 12px;
+            position: absolute;
+            right: 10px;
+            text-shadow: 1px 1px 1px #FFF;
+            top: 9px
+        }
+
+        .main-login input.password {
+            padding-right: 130px
+        }
+
+        .main-login label {
+            color: #7F7F7F;
+            font-size: 14px;
+            margin-top: 5px
+        }
+
+        .main-login .copyright {
+            font-size: 11px;
+            margin: 0 auto;
+            padding: 10px 10px 0;
+            text-align: center
+        }
+
+        .main-login .form-actions:after, .main-login .form-actions:before {
+            content: "";
+            display: table;
+            line-height: 0
+        }
+
+        .main-login .form-actions:after {
+            clear: both
+        }
+
+        .main-login .form-actions {
+            margin-top: 15px;
+            padding-top: 10px;
+            display: block
+        }
+
+        .main-login .new-account {
+            border-top: 1px dotted #EEE;
+            margin-top: 15px;
+            padding-top: 10px;
+            display: block
+        }
+        span.input-help,span.input-icon {
+            display: block;
+            position: relative
+        }
+
+        .input-icon>input {
+            padding-left: 30px!important;
+            padding-right: 6px
+        }
+
+        .input-icon.input-icon-right>input {
+            padding-left: 6px!important;
+            padding-right: 30px!important
+        }
+
+        span.input-help>input {
+            padding-left: 30px;
+            padding-right: 6px
+        }
+
+        .input-icon>[class*=ti-],.input-icon>[class*=fa-] {
+            bottom: 0;
+            color: #007AFF;
+            display: inline-block;
+            left: 5px;
+            line-height: 35px;
+            padding: 0 3px;
+            position: absolute;
+            top: -1px;
+            z-index: 2
+        }
+
+        .input-icon.input-icon-right>[class*=ti-],.input-icon.input-icon-right>[class*=fa-] {
+            left: auto;
+            right: 4px
+        }
+    </style>
+</head>
+<body>
+<div class="main-login">
+    <div class="box-login">
+        <form class="form-login ng-valid ng-dirty ng-valid-parse" novalidate="novalidate">
+            <fieldset>
+                <legend> 登录</legend>
+                <p> 请输入你的用户名和密码 </p>
+                <div class="form-group"><span class="input-icon"> <input type="text"
+                                                                         class="form-control ng-untouched ng-valid ng-dirty ng-valid-parse"
+                                                                         name="username" placeholder="用户名"
+                                                                         ng-model="user.username"> <i
+                        class="fa fa-user"></i> </span></div>
+                <div class="form-group form-actions"><span class="input-icon"> <input type="password"
+                                                                                      class="form-control password ng-untouched ng-valid ng-dirty ng-valid-parse"
+                                                                                      name="password" placeholder="密码"
+                                                                                      ng-model="user.password"> <i
+                        class="fa fa-lock"></i> <a class="forgot" ui-sref="login.forgot"
+                                                   href="#/login/forgot"> 忘记密码？ </a> </span>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary pull-right"> 登录 <i class="fa fa-arrow-circle-right"></i></button>
+                </div>
+                <div class="new-account"> 还没有账户? <a ui-sref="login.registration" href="#/login/registration"> 注册新用户 </a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>

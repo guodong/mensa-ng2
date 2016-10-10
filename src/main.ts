@@ -7,4 +7,4 @@ if (process.env.ENV === 'production') {
 //noinspection TypeScriptValidateTypes
 
 
-var t = setTimeout(function() { platformBrowserDynamic().bootstrapModule(AppModule); clearTimeout(t)}, 5000);
+var t = setTimeout(function() { platformBrowserDynamic().bootstrapModule(AppModule); clearTimeout(t)}, 500);

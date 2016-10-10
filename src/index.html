@@ -2,16 +2,16 @@
 <html>
 <head>
     <base href="/">
-    <title>Angular With Webpack</title>
+    <title>Mensa - Cloudware Interacting Platform</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body oncontextmenu="return false;">
 <div class="preload">
     <div class="band">
-    <canvas id="canvas" width="300" height="300"></canvas>
-    <div class="slogan">CloudwareHub</div>
-    <div class="slogan">即将开启云计算时代下的软件新体验...</div>
+        <canvas id="canvas" width="300" height="300"></canvas>
+        <div class="slogan">CloudwareHub</div>
+        <div class="slogan">开启云时代软件新体验</div>
     </div>
 </div>
 <script>
@@ -27,15 +27,15 @@
         }
         //canvas.style.backgroundColor = 'rgba(255, 255, 255, 1)';
         var ctx = canvas.getContext('2d');
-        ctx.clearRect(0,0,300,300);
+        ctx.clearRect(0, 0, 300, 300);
         ctx.save();
-        ctx.translate(150,150);
+        ctx.translate(150, 150);
         var time = new Date();
-        ctx.rotate( ((8*Math.PI)/60)*time.getSeconds() + ((8*Math.PI)/60000)*time.getMilliseconds() );
-        ctx.drawImage(cloudbg,-150,-150,300,300);
+        ctx.rotate(((8 * Math.PI) / 60) * time.getSeconds() + ((8 * Math.PI) / 60000) * time.getMilliseconds());
+        ctx.drawImage(cloudbg, -150, -150, 300, 300);
 
         ctx.restore();
-        ctx.drawImage(cloud,0,0,300,300);
+        ctx.drawImage(cloud, 0, 0, 300, 300);
         window.requestAnimationFrame(draw);
     }
 

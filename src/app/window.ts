@@ -20,7 +20,7 @@ export class Window {
   minimizable: boolean = true;
   maximizable: boolean = true;
   
-  constructor(args: any) {
+  constructor(args: any) {console.log(args)
     this.visible = false;
     for (var i in args) {
       this[i] = args[i];

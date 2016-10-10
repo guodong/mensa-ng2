@@ -13,7 +13,8 @@
     </div>
 
     <div class="content-row">
-        <div class="content" [innerHTML]="window.content"></div>
+        <div class="content" *ngIf="!window.src" [innerHTML]="window.content | safeHtml"></div>
+        <iframe *ngIf="window.src" [src]="window.src | safeUrl" frameBorder="0" width="100%" height="100%"></iframe>
     </div>
 
 </div>

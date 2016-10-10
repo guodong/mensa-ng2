@@ -2,6 +2,9 @@ import {Injectable, NgZone} from '@angular/core';
 import {WmService} from './wm.service';
 import {App} from './app';
 import {Process} from './process';
+import {DatastoreService} from "./datastore.service";
+import {Instance, User, Version} from "./models";
+import {SessiongManagerService} from "./session-manager.service";
 
 @Injectable()
 export class ProcessManagerService {
@@ -9,12 +12,12 @@ export class ProcessManagerService {
   processes: Process[] = [];
   zone: NgZone;
 
-  constructor(private wmService: WmService) {
+  constructor(private wmService: WmService, private dsService: DatastoreService, private smService: SessiongManagerService) {
     this.zone = new NgZone({enableLongStackTrace: false});
   }
 
-  getProcesses() {
-    return this.processes;
+  getProcesses(): Promise<Process[]> {
+    return Promise.resolve(this.processes);
   }
 
   activeProcess(process: Process) {
@@ -84,19 +87,31 @@ export class ProcessManagerService {
 
   run(app: App) {
     var me = this;
+    
     this.showLoading().then((loadingWindow) => {
+      
       if (app.type == 'cloudware') {
-        var process = new Process({
-          pid: this.pid++,
-          entry: '/assets/js/cloudware.js',
-          app: app
+        let instance = me.dsService.createRecord(Instance, {
+          user: me.dsService.peekRecord(User, me.smService.currentUser.id),
+          version: me.dsService.peekRecord(Version, app.id)
         });
-        this.processes.push(process);
-        this.activeProcess(process);
-        process.worker.onmessage = function (msg: any) {
-          me.wmService.destroyWindow(loadingWindow);
-          return me.handleMessage(msg, process);
-        }
+        instance.save().subscribe(
+          (ins: Instance) => {
+            var process = new Process({
+              pid: this.pid++,
+              entry: '/assets/js/cloudware.js',
+              app: app,
+              instance: ins
+            });
+            this.processes.push(process);
+            this.activeProcess(process);
+            process.worker.onmessage = function (msg: any) {
+              me.wmService.destroyWindow(loadingWindow);
+              return me.handleMessage(msg, process);
+            }
+          }
+        );
+        
       } else {
         var url = app.url + '/' + app.config.entry;
         var process = new Process({
@@ -115,6 +130,13 @@ export class ProcessManagerService {
       }
     });
 
+  }
+  
+  private makeSrc(src: string, proc: Process) {
+    if (!src) {
+      return null;
+    }
+    return (src.indexOf('http') === 0)?src:(proc.app.url + '/' + src);
   }
 
 
@@ -185,6 +207,13 @@ export class ProcessManagerService {
             break;
         }
         break;
+      case 'instance':
+        switch (action) {
+          case 'token':
+            makeReply(request, process.instance.token);
+            break;
+        }
+        break;
       case 'window':
         switch (action) {
           case 'create':
@@ -197,7 +226,8 @@ export class ProcessManagerService {
               content: payload.content || '',
               process: process,
               type: payload.type || 'normal',
-              bare: payload.bare || false
+              bare: payload.bare || false,
+              src: this.makeSrc(payload.src, process) || null
             };
             this.zone.run(() => {
               this.wmService.createWindow(opts).then(window => {

@@ -5,7 +5,7 @@ import {JsonApiModule} from 'angular2-jsonapi';
 
 import {AppComponent} from './app.component';
 import {DesktopComponent} from './desktop.component';
-import {WindowComponent} from './window.component';
+import {WindowComponent, SafeHtmlPipe, SafeUrlPipe} from './window.component';
 import {TaskbarComponent} from './taskbar.component';
 import {StartmenuComponent} from './startmenu.component';
 import {DesktopIconItemComponent} from './desktop-icon-item.component';
@@ -16,6 +16,7 @@ import {AppManagerService} from './app-manager.service';
 import {RegistryService} from './registry.service';
 import {ProcessManagerService} from './process-manager.service';
 import {DatastoreService} from './datastore.service';
+import {SessiongManagerService} from "./session-manager.service";
 
 enableProdMode();
 @NgModule({
@@ -31,14 +32,17 @@ enableProdMode();
     WindowComponent,
     StartmenuComponent,
     DesktopIconItemComponent,
-    TaskbarIconItemComponent
+    TaskbarIconItemComponent,
+    SafeHtmlPipe,
+    SafeUrlPipe,
   ],
   providers: [
     WmService,
     AppManagerService,
     RegistryService,
     ProcessManagerService,
-    DatastoreService
+    DatastoreService,
+    SessiongManagerService,
   ],
   bootstrap: [AppComponent]
 })

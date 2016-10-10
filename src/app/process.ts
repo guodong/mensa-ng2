@@ -9,11 +9,13 @@ export class Process {
   windows: Window[] = [];
   active: boolean = false;
   zone: NgZone;
+  instance: any;
 
   constructor(args: any) {
     for (var i in args) {
       this[i] = args[i];
     }
+
 
     this.zone = new NgZone({enableLongStackTrace: false});
     this.screen = {
@@ -22,16 +24,9 @@ export class Process {
       canvas: document.createElement('canvas')
     };
 
-    var self = this;
-
-    if (this.app.type == 'cloudware') {
-      // this.mask = new Mask();
-      // this.mask.show();
-    }
-
     var worker = this.worker = new Worker('/assets/js/loader.js');
+    var info = JSON.parse(localStorage.getItem('user'));
+    worker.postMessage({entry: this.app.entry, version_id: this.app.config.id, sysname: info.sysname});
 
-    worker.postMessage({entry: this.app.entry, version_id: this.app.config.id});
-    
   }
 }

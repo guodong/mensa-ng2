@@ -17,11 +17,13 @@ export class StartmenuComponent implements OnInit {
   versions: Version[];
 
   constructor(private _eref: ElementRef, private dsService: DatastoreService, private amService: AppManagerService,
-  private pmService: ProcessManagerService) {
+              private pmService: ProcessManagerService) {
   }
 
   ngOnInit() {
-    this.dsService.query(Version).subscribe(
+    this.dsService.query(Version, {
+      include: 'cloudware'
+    }).subscribe(
       (versions: Version[]) => this.versions = versions
     )
   }
@@ -35,7 +37,7 @@ export class StartmenuComponent implements OnInit {
       this.active = false;
     }
   }
-  
+
   run(version: Version) {
     this.amService.installCloudwareVersion(version).then(app => this.pmService.run(app));
     this.active = false;

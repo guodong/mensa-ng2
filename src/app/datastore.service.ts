@@ -1,14 +1,16 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {JsonApiDatastore, JsonApiDatastoreConfig} from 'angular2-jsonapi';
-import {Version, Cloudware} from './models';
+import {Version, Cloudware, User, Instance} from './models';
 
 @Injectable()
 @JsonApiDatastoreConfig({
-  baseUrl: 'http://apiv2.cloudwarehub.com/',
+  baseUrl: 'http://localhost:3000/',
   models: {
     cloudwares: Cloudware,
-    versions: Version
+    versions: Version,
+    users: User,
+    instances: Instance
   }
 })
 export class DatastoreService extends JsonApiDatastore {

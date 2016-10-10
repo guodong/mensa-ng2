@@ -16,7 +16,7 @@ export class TaskbarComponent implements OnInit {
 
   ngOnInit(): void {
     var me = this;
-    this.processes = this.processManagerService.getProcesses();
+    this.processManagerService.getProcesses().then(processes => this.processes = processes);
     function startTime(){
       var m = new Date();
       var dateString = m.getFullYear() + "/" + ("0" + (m.getMonth() + 1)).slice(-2) + "/" + ("0" + m.getDate()).slice(-2);

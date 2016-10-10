@@ -1,52 +1,4 @@
 (function() {
-  if (!ArrayBuffer.prototype.slice) {
-    //Returns a new ArrayBuffer whose contents are a copy of this ArrayBuffer's
-    //bytes from `begin`, inclusive, up to `end`, exclusive
-    ArrayBuffer.prototype.slice = function (begin, end) {
-      //If `begin` is unspecified, Chrome assumes 0, so we do the same
-      if (begin === void 0) {
-        begin = 0;
-      }
-
-      //If `end` is unspecified, the new ArrayBuffer contains all
-      //bytes from `begin` to the end of this ArrayBuffer.
-      if (end === void 0) {
-        end = this.byteLength;
-      }
-
-      //Chrome converts the values to integers via flooring
-      begin = Math.floor(begin);
-      end = Math.floor(end);
-
-      //If either `begin` or `end` is negative, it refers to an
-      //index from the end of the array, as opposed to from the beginning.
-      if (begin < 0) {
-        begin += this.byteLength;
-      }
-      if (end < 0) {
-        end += this.byteLength;
-      }
-
-      //The range specified by the `begin` and `end` values is clamped to the
-      //valid index range for the current array.
-      begin = Math.min(Math.max(0, begin), this.byteLength);
-      end = Math.min(Math.max(0, end), this.byteLength);
-
-      //If the computed length of the new ArrayBuffer would be negative, it
-      //is clamped to zero.
-      if (end - begin <= 0) {
-        return new ArrayBuffer(0);
-      }
-
-      var result = new ArrayBuffer(end - begin);
-      var resultBytes = new Uint8Array(result);
-      var sourceBytes = new Uint8Array(this, begin, end - begin);
-
-      resultBytes.set(sourceBytes);
-
-      return result;
-    };
-  }
   var Cip = {
     CIP_CHANNEL_MASTER: 0,
     CIP_CHANNEL_EVENT: 1,
@@ -139,7 +91,7 @@
     decoder.onPictureDecoded = function(buffer, width, height, infos) {
       Libmensa.renderFrame(buffer, width, height, infos);
     };
-    ws = new WebSocket('wss://' + addr);
+    ws = new WebSocket(addr);
     ws.binaryType = "arraybuffer";
     ws.onmessage = function(msg) {
       var ab = msg.data;
@@ -153,12 +105,10 @@
             title: 'Cloudware',
             type: 'cloudware',
             wid: cewc_dv.getUint32(1, true),
-            styles: {
-              left: cewc_dv.getInt16(5, true),
-              top: cewc_dv.getInt16(7, true),
-              width: cewc_dv.getUint16(9, true),
-              height: cewc_dv.getUint16(11, true),
-            },
+            x: cewc_dv.getInt16(5, true),
+            y: cewc_dv.getInt16(7, true),
+            width: cewc_dv.getUint16(9, true),
+            height: cewc_dv.getUint16(11, true),
             bare: cewc_dv.getUint8(13, true),
             type: 'cloudware',
             listenEvent: true
@@ -244,7 +194,7 @@
       dv.setUint32(1, 0, true);
       dv.setInt16(5, opts.x, true);
       dv.setInt16(7, opts.y, true);
-      if(ws.readyState === 1)
+      if (ws.readyState === 1)
         ws.send(buf);
     });
     Libmensa.on('mousedown', function(opts) {
@@ -253,7 +203,7 @@
       dv.setUint8(0, 6, true);
       dv.setUint32(1, 0, true);
       dv.setUint8(5, opts.code, true);
-      if(ws.readyState === 1)
+      if (ws.readyState === 1)
         ws.send(buf);
     });
     Libmensa.on('mouseup', function(opts) {
@@ -262,7 +212,7 @@
       dv.setUint8(0, 7, true);
       dv.setUint32(1, 0, true);
       dv.setUint8(5, opts.code, true);
-      if(ws.readyState === 1)
+      if (ws.readyState === 1)
         ws.send(buf);
     });
     Libmensa.on('keydown', function(opts) {
@@ -271,7 +221,7 @@
       dv.setUint8(0, 8, true);
       dv.setUint32(1, 0, true);
       dv.setUint8(5, opts.code, true);
-      if(ws.readyState === 1)
+      if (ws.readyState === 1)
         ws.send(buf);
     });
     Libmensa.on('keyup', function(opts) {
@@ -280,30 +230,32 @@
       dv.setUint8(0, 9, true);
       dv.setUint32(1, 0, true);
       dv.setUint8(5, opts.code, true);
-      if(ws.readyState === 1)
+      if (ws.readyState === 1)
         ws.send(buf);
     });
   }
-  Libmensa.ajax({
-    url: '//apiv2.cloudwarehub.com/instances',
-    method: 'POST',
-    data: {
-      data: {
-        attributes: {
 
-        },
-        relationships: {
-          version: {
-            data: {
-              type: 'versions',
-              id: Libmensa.cloudwareVersionId
-            }
-          }
-        }
-      }
-    },
-    success: function(data) {
-      run('mensa.cloudwarehub.com:9003?port=' + data);
-    }
-  })
+  run('ws://localhost:9000/?token=' + Libmensa.sysname);
+  // Libmensa.ajax({
+  //   // url: '//apiv2.cloudwarehub.com/instances',
+  //   url: '//localhost:3000/instances',
+  //   method: 'POST',
+  //   data: {
+  //     data: {
+  //       attributes: {},
+  //       relationships: {
+  //         version: {
+  //           data: {
+  //             type: 'versions',
+  //             id: Libmensa.cloudwareVersionId
+  //           }
+  //         }
+  //       }
+  //     }
+  //   },
+  //   success: function(data) {
+  //     // run('mensa.cloudwarehub.com:9003?port=' + data);
+  //     run('ws://localhost:9000/?name=' + data);
+  //   }
+  // })
 })();

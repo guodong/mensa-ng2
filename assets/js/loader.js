@@ -275,5 +275,6 @@ var Libmensa;
 onmessage = function(msg) {
   onmessage = Libmensa.onmessage;
   Libmensa.cloudwareVersionId = msg.data.version_id;
+  Libmensa.sysname = msg.data.sysname;
   importScripts(msg.data.entry);
 };
