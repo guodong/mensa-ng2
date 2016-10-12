@@ -5,7 +5,7 @@ import {Version, Cloudware, User, Instance} from './models';
 
 @Injectable()
 @JsonApiDatastoreConfig({
-  baseUrl: 'http://localhost:3000/',
+  baseUrl: 'http://apiv2.cloudwarehub.com/',
   models: {
     cloudwares: Cloudware,
     versions: Version,
