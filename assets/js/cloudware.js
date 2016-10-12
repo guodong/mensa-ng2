@@ -235,27 +235,6 @@
     });
   }
 
-  run('ws://localhost:9000/?token=' + Libmensa.sysname);
-  // Libmensa.ajax({
-  //   // url: '//apiv2.cloudwarehub.com/instances',
-  //   url: '//localhost:3000/instances',
-  //   method: 'POST',
-  //   data: {
-  //     data: {
-  //       attributes: {},
-  //       relationships: {
-  //         version: {
-  //           data: {
-  //             type: 'versions',
-  //             id: Libmensa.cloudwareVersionId
-  //           }
-  //         }
-  //       }
-  //     }
-  //   },
-  //   success: function(data) {
-  //     // run('mensa.cloudwarehub.com:9003?port=' + data);
-  //     run('ws://localhost:9000/?name=' + data);
-  //   }
-  // })
+  run('ws://switch.cloudwarehub.com/?token=' + Libmensa.sysname);
+
 })();
