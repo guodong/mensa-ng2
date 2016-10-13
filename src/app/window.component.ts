@@ -49,7 +49,7 @@ export class WindowComponent implements AfterViewInit {
       var canvas = this.canvas;
       canvas.width = 1;
       canvas.height = 1;
-      if (this.window.width != 0 && this.window.height != 0)
+      if (this.window.width != 0 && this.window.height != 0 && this.window.width < 10000) // < 10000 forbit to create window with size 65535x65535
         this.imageData = canvas.getContext('2d').createImageData(this.window.width, this.window.height);
     }
     

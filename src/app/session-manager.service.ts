@@ -25,6 +25,7 @@ export class SessiongManagerService {
     });
     user.save().subscribe((u: User) => {
       localStorage.setItem('user', JSON.stringify({id: u.id, sysname: u.sysname, role: u.role}));
+      me.currentUser = u;
     });
   }
   
