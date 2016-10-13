@@ -93,7 +93,9 @@ export class ProcessManagerService {
       if (app.type == 'cloudware') {
         let instance = me.dsService.createRecord(Instance, {
           user: me.dsService.peekRecord(User, me.smService.currentUser.id),
-          version: me.dsService.peekRecord(Version, app.id)
+          version: me.dsService.peekRecord(Version, app.id),
+          width: window.innerWidth,
+          height: window.innerHeight
         });
         instance.save().subscribe(
           (ins: Instance) => {

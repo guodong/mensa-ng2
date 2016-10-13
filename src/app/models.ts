@@ -48,4 +48,10 @@ export class Instance extends JsonApiModel {
 
   @BelongsTo()
   version: Version;
+
+  @Attribute()
+  width: number;
+
+  @Attribute()
+  height: number;
 }
