@@ -11,6 +11,7 @@ import {SessiongManagerService} from "./session-manager.service";
 export class AppComponent {
   constructor(private appManagerService: AppManagerService, private smService: SessiongManagerService) {
     this.appManagerService.install('/apps/about').then(app => console.log(app));
+    this.appManagerService.install('/apps/myfiles');
     this.smService.loginAsGuest();
   }
   
