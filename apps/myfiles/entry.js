@@ -1,8 +1,8 @@
 
 Libmensa.createWindow({
   title: 'My Files',
-  width: 500,
-  height: 500,
+  width: 800,
+  height: 600,
   x: 400,
   y: 100,
   src: 'http://files.cloudwarehub.com/files?sysname='+Libmensa.sysname
