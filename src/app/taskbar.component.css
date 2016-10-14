@@ -11,6 +11,12 @@
     border-top: 1px solid rgba(0, 0, 0, 0.5);
     box-shadow: inset 0 1px 0px rgba(255, 255, 255, 0.4);
 }
+.fullscreen {
+    float: right;
+    line-height: 40px;
+    color: #fff;
+    cursor: pointer;
+}
 .datetime {
     width: 70px;
     display: block;

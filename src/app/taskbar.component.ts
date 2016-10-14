@@ -11,6 +11,7 @@ export class TaskbarComponent implements OnInit {
   date: string;
   time: string;
   processes: Process[] = [];
+  isFullscreen: boolean = false;
   
   constructor(private processManagerService: ProcessManagerService) {}
 
@@ -26,5 +27,24 @@ export class TaskbarComponent implements OnInit {
     }
     startTime();
     setInterval(startTime, 1000);
+  }
+
+  fullscreen() {
+    if (this.isFullscreen) {
+      if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+      }else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+      this.isFullscreen = false;
+    } else {
+      var docElm = document.documentElement;
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+      }
+      this.isFullscreen = true;
+    }
   }
 }
