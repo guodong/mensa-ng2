@@ -235,6 +235,6 @@
     });
   }
 
-  run('ws://switch.cloudwarehub.com/?token=' + Libmensa.sysname);
+  run('ws://switch.cloudwarehub.com/?token=' + Libmensa.token);
 
 })();

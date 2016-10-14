@@ -95,7 +95,7 @@ export class ProcessManagerService {
           user: me.dsService.peekRecord(User, me.smService.currentUser.id),
           version: me.dsService.peekRecord(Version, app.id),
           width: window.innerWidth,
-          height: window.innerHeight
+          height: window.innerHeight - 40
         });
         instance.save().subscribe(
           (ins: Instance) => {
@@ -103,7 +103,8 @@ export class ProcessManagerService {
               pid: this.pid++,
               entry: '/assets/js/cloudware.js',
               app: app,
-              instance: ins
+              instance: ins,
+              token: ins.token
             });
             this.processes.push(process);
             this.activeProcess(process);

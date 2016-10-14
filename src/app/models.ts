@@ -54,4 +54,7 @@ export class Instance extends JsonApiModel {
 
   @Attribute()
   height: number;
+  
+  @Attribute()
+  token: string;
 }

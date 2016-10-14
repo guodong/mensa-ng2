@@ -10,6 +10,7 @@ export class Process {
   active: boolean = false;
   zone: NgZone;
   instance: any;
+  token: string;
 
   constructor(args: any) {
     for (var i in args) {
@@ -26,7 +27,7 @@ export class Process {
 
     var worker = this.worker = new Worker('/assets/js/loader.js');
     var info = JSON.parse(localStorage.getItem('user'));
-    worker.postMessage({entry: this.app.entry, version_id: this.app.config.id, sysname: info.sysname});
+    worker.postMessage({entry: this.app.entry, version_id: this.app.config.id, sysname: info.sysname, token: this.token});
 
   }
 }
