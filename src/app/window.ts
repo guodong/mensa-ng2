@@ -48,6 +48,9 @@ export class Window {
   }
   
   unMaximize() {
+    if (!this.visible) {
+      return;
+    }
     this.x = this.oldGeo.x;
     this.y = this.oldGeo.y;
     this.width = this.oldGeo.width;
