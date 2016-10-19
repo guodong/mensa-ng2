@@ -19,6 +19,7 @@ export class Window {
   canvas: any;
   minimizable: boolean = true;
   maximizable: boolean = true;
+  originX: number;
   
   constructor(args: any) {console.log(args)
     this.visible = false;
@@ -48,9 +49,6 @@ export class Window {
   }
   
   unMaximize() {
-    if (!this.visible) {
-      return;
-    }
     this.x = this.oldGeo.x;
     this.y = this.oldGeo.y;
     this.width = this.oldGeo.width;
@@ -63,11 +61,12 @@ export class Window {
   }
   
   minimize() {
-    this.visible = false;
+    this.originX = this.x;
+    this.x = -9999;
   }
 
   unMinimize() {
-    this.visible = true;
+    this.x = this.originX;
   }
 
   configure(styles: any) {
