@@ -61,12 +61,14 @@ export class Window {
   }
   
   minimize() {
-    this.originX = this.x;
-    this.x = -9999;
+    this.visible = false;
+    this.isMinimized = true;
   }
 
   unMinimize() {
-    this.x = this.originX;
+    if (this.isMinimized) {
+      this.visible = true;
+    }
   }
 
   configure(styles: any) {
