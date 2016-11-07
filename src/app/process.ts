@@ -120,7 +120,7 @@ export class Process {
         (function loop() {
           if (!$this.paused && !$this.ended) {
             me.windows.forEach(function (window) {
-              if (window.startRender && window.canvas) {
+              if (window.visible && window.startRender && window.canvas) {
                 window.canvas.width = window.width;
                 window.canvas.height = window.height;
                 window.canvas.getContext('2d').drawImage(video, -window.x, -window.y);
