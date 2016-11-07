@@ -57,4 +57,7 @@ export class Instance extends JsonApiModel {
   
   @Attribute()
   token: string;
+  
+  @Attribute()
+  usewebrtc: boolean;
 }
