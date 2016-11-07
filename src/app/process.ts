@@ -94,7 +94,10 @@ export class Process {
     var socket = me.signal;
     pc.onicecandidate = function (event) {
       if (event.candidate !== null) {
-        socket.send(JSON.stringify(event.candidate));
+        setTimeout(function () {
+          socket.send(JSON.stringify(event.candidate));
+        }, 1000);
+
       }
     };
 

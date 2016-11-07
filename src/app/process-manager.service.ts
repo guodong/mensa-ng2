@@ -224,7 +224,7 @@ export class ProcessManagerService {
             document.getElementsByTagName('body')[0].style.cursor = 'default';
             var video_node = document.getElementById(process.screen.video_id);
             if (video_node) {
-              document.removeChild(video_node);
+              video_node.parentNode.removeChild(video_node);
             }
             break;
         }
