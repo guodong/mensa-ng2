@@ -16,53 +16,15 @@ export class Process {
   signal: any; //signal socket
 
   supportWebrtc() {
-    
-    var prefix;
-    var version;
-
-    if (window.mozRTCPeerConnection || navigator.mozGetUserMedia) {
-      prefix = 'moz';
-      version = parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1], 10);
-    } else if (window.webkitRTCPeerConnection || navigator.webkitGetUserMedia) {
-      prefix = 'webkit';
-      version = navigator.userAgent.match(/Chrom(e|ium)/) && parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)[2], 10);
-    }
 
     var PC = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-    var IceCandidate = window.mozRTCIceCandidate || window.RTCIceCandidate;
-    var SessionDescription = window.mozRTCSessionDescription || window.RTCSessionDescription;
-    var MediaStream = window.webkitMediaStream || window.MediaStream;
-    var screenSharing = window.location.protocol === 'https:' &&
-      ((prefix === 'webkit' && version >= 26) ||
-      (prefix === 'moz' && version >= 33))
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    var videoEl = document.createElement('video');
-    var supportVp8 = videoEl && videoEl.canPlayType && videoEl.canPlayType('video/webm; codecs="vp8", vorbis') === "probably";
-    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia || navigator.mozGetUserMedia;
-    
-    var support = !!PC && !!getUserMedia;
+
+    var support = !!PC;
     if (window.location.hash.substr(1) == 'nowebrtc') {
       support = false;
     }
     return {
-      prefix: prefix,
-      browserVersion: version,
       support: support,
-      // new support style
-      supportRTCPeerConnection: !!PC,
-      supportVp8: supportVp8,
-      supportGetUserMedia: !!getUserMedia,
-      supportDataChannel: !!(PC && PC.prototype && PC.prototype.createDataChannel),
-      supportWebAudio: !!(AudioContext && AudioContext.prototype.createMediaStreamSource),
-      supportMediaStream: !!(MediaStream && MediaStream.prototype.removeTrack),
-      supportScreenSharing: !!screenSharing,
-      // constructors
-      AudioContext: AudioContext,
-      PeerConnection: PC,
-      SessionDescription: SessionDescription,
-      IceCandidate: IceCandidate,
-      MediaStream: MediaStream,
-      getUserMedia: getUserMedia
     };
   }
 
@@ -95,7 +57,7 @@ export class Process {
 
       this.screen.video.setAttribute('id', this.screen.video_id);
       document.body.appendChild(this.screen.video);
-      document.getElementById(me.screen.video_id).autoplay = true;
+      document.getElementById(me.screen.video_id).setAttribute('autoplay', 'true');
 
       var socket = new WebSocket("ws://switch.cloudwarehub.com/?token=" + this.token + "_conn");
       me.signal = socket;
@@ -138,11 +100,12 @@ export class Process {
 
     // 如果检测到媒体流连接到本地，将其绑定到一个video标签上输出
     pc.onaddstream = function (event: any) {
-      var video = document.getElementById(me.screen.video_id);
+      var video = <HTMLVideoElement> document.getElementById(me.screen.video_id);
+      var video = (<HTMLVideoElement>video);
       //me.screen.video.src = URL.createObjectURL(event.stream);
       video.src = URL.createObjectURL(event.stream);
       var p = setInterval(function () {
-        document.getElementById(me.screen.video_id).play();
+        video.play();
         console.log('play');
       }, 500);
       video.addEventListener('playing', function () {
