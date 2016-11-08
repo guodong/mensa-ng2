@@ -41,6 +41,16 @@
     }
 
     window.requestAnimationFrame(draw);
+    var images = new Array()
+    function preload() {
+        for (var i = 0; i < preload.arguments.length; i++) {
+            images[i] = new Image()
+            images[i].src = preload.arguments[i]
+        }
+    }
+    preload(
+            "http://cloudwarehub.com/assets/images/windows7-bg.jpg"
+    )
 </script>
 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260768865'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1260768865' type='text/javascript'%3E%3C/script%3E"));</script>
 </body>
