@@ -92,6 +92,7 @@ export class Process {
     me.pc = new RTCPeerConnection(iceServer);
     var pc = me.pc;
     var socket = me.signal;
+    var dc = pc.createDataChannel("sigchannel");
     pc.onicecandidate = function (event) {
       if (event.candidate !== null) {
         setTimeout(function () {
