@@ -115,8 +115,6 @@ export class Process {
       video.addEventListener('playing', function () {
         console.log('stop intalval');
         clearInterval(p);
-      });
-      video.addEventListener('play', function() {
         var $this = this; //cache
         (function loop() {
           if (!$this.paused && !$this.ended) {
@@ -131,6 +129,9 @@ export class Process {
           }
         })();
       });
+      /*video.addEventListener('play', function() {
+        
+      });*/
     };
 
     var sendOfferFn = function (desc: any) {
