@@ -39,11 +39,11 @@ export class WarpgateService {
    * predict latency in ms
    * @type {number}
    */
-  public latency = 100;
+  public latency = 50;
 
   public predict(state) {
     this.states.push(state);
-    if (this.states.length < 10) {
+    if (this.states.length < 5) {
       return state;
     }
     /* restore state */

@@ -53,7 +53,7 @@ export class DesktopComponent implements OnInit {
         }
       });
       p = setTimeout(function () {
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 6; i++) {
           var pos = me.warpgateService.predict({
             time: (new Date).getTime(),
             position: [e.pageX, e.pageY]
