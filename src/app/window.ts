@@ -21,7 +21,7 @@ export class Window {
   maximizable: boolean = true;
   originX: number;
   
-  constructor(args: any) {console.log(args)
+  constructor(args: any) {
     this.visible = false;
     for (var i in args) {
       this[i] = args[i];

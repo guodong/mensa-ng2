@@ -106,29 +106,27 @@ export class Process {
     pc.onaddstream = function (event: any) {
       var video = <HTMLVideoElement> document.getElementById(me.screen.video_id);
       var video = (<HTMLVideoElement>video);
-      //me.screen.video.src = URL.createObjectURL(event.stream);
+      (function loop() {
+        //if (!$this.paused && !$this.ended) {
+          me.windows.forEach(function (window) {
+            if (window.visible && window.startRender && window.canvas) {
+              window.canvas.width = window.width;
+              window.canvas.height = window.height;
+              window.canvas.getContext('2d').drawImage(video, -window.x, -window.y);
+            }
+          });
+          setTimeout(loop, 0);
+        //}
+      })();
       video.src = URL.createObjectURL(event.stream);
-      var p = setInterval(function () {
-        video.play();
-        console.log('play');
-      }, 500);
       video.addEventListener('playing', function () {
-        console.log('stop intalval');
-        clearInterval(p);
+        console.log('playing');
         var $this = this; //cache
-        (function loop() {
-          if (!$this.paused && !$this.ended) {
-            me.windows.forEach(function (window) {
-              if (window.visible && window.startRender && window.canvas) {
-                window.canvas.width = window.width;
-                window.canvas.height = window.height;
-                window.canvas.getContext('2d').drawImage(video, -window.x, -window.y);
-              }
-            });
-            setTimeout(loop, 0);
-          }
-        })();
+
       });
+      setInterval(function () {
+        video.play();
+      }, 2000);
       /*video.addEventListener('play', function() {
         
       });*/
@@ -136,7 +134,9 @@ export class Process {
 
     var sendOfferFn = function (desc: any) {
       pc.setLocalDescription(desc);
-      socket.send(JSON.stringify(desc));
+      setTimeout(function () {
+        socket.send(JSON.stringify(desc));
+      }, 1000);
     };
 
     pc.createOffer(sendOfferFn, function (error) {

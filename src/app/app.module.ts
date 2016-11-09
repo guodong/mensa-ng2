@@ -17,6 +17,7 @@ import {RegistryService} from './registry.service';
 import {ProcessManagerService} from './process-manager.service';
 import {DatastoreService} from './datastore.service';
 import {SessiongManagerService} from "./session-manager.service";
+import {WarpgateService} from "./warpgate.service";
 
 enableProdMode();
 @NgModule({
@@ -43,6 +44,7 @@ enableProdMode();
     ProcessManagerService,
     DatastoreService,
     SessiongManagerService,
+    WarpgateService,
   ],
   bootstrap: [AppComponent]
 })

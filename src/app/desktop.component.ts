@@ -5,6 +5,7 @@ import {ProcessManagerService} from './process-manager.service';
 import {App} from "./app";
 import {RegistryService} from "./registry.service";
 import {Process} from './process';
+import {WarpgateService} from "./warpgate.service";
 
 @Component({
   selector: 'desktop',
@@ -19,7 +20,9 @@ export class DesktopComponent implements OnInit {
 
   apps: App[] = [];
 
-  constructor(private wmService: WmService, private pmService: ProcessManagerService, private registryService: RegistryService) {
+  constructor(private wmService: WmService, private pmService: ProcessManagerService,
+              private registryService: RegistryService,
+              private warpgateService: WarpgateService) {
   }
 
   ngOnInit(): void {
@@ -27,19 +30,44 @@ export class DesktopComponent implements OnInit {
     this.wmService.getWindows().then(windows => this.windows = windows);
     this.apps = this.registryService.getApps();
 
+    setInterval(function () {
+
+    });
+    var p; // timeout handle
     document.onmousemove = function (e: any) {
+      clearTimeout(p);
       var process = me.pmService.getActiveProcess();
       if (!process) {
         return;
       }
+      var pos = me.warpgateService.predict({
+        time: (new Date).getTime(),
+        position: [e.pageX, e.pageY]
+      });
       process.worker.postMessage({
         msg: 'mousemove',
         payload: {
           id: 0,
-          x: e.pageX,
-          y: e.pageY
+          x: pos.position[0],
+          y: pos.position[1]
         }
       });
+      p = setTimeout(function () {
+        for (var i = 0; i < 10; i++) {
+          var pos = me.warpgateService.predict({
+            time: (new Date).getTime(),
+            position: [e.pageX, e.pageY]
+          });
+          process.worker.postMessage({
+            msg: 'mousemove',
+            payload: {
+              id: 0,
+              x: pos.position[0],
+              y: pos.position[1]
+            }
+          });
+        }
+      }, 20);
     };
     document.onmousedown = function (e: any) {
       var process = me.pmService.getActiveProcess();
