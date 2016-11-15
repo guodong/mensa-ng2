@@ -133,6 +133,7 @@ export class Process {
     };
 
     var sendOfferFn = function (desc: any) {
+      desc.sdp = me.setBandwidth(desc.sdp, 50, 250);
       pc.setLocalDescription(desc);
       setTimeout(function () {
         socket.send(JSON.stringify(desc));
@@ -142,5 +143,11 @@ export class Process {
     pc.createOffer(sendOfferFn, function (error) {
       console.log('Failure callback: ' + error);
     }, {offerToReceiveVideo: true});
+  }
+
+  setBandwidth(sdp: string, audioBandwidth: number, videoBandwidth: number) {
+    sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
+    sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + videoBandwidth + '\r\n');
+    return sdp;
   }
 }

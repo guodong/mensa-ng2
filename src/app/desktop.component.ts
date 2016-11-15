@@ -20,6 +20,8 @@ export class DesktopComponent implements OnInit {
 
   apps: App[] = [];
 
+  useML: boolean = false;
+
   constructor(private wmService: WmService, private pmService: ProcessManagerService,
               private registryService: RegistryService,
               private warpgateService: WarpgateService) {
@@ -30,45 +32,60 @@ export class DesktopComponent implements OnInit {
     this.wmService.getWindows().then(windows => this.windows = windows);
     this.apps = this.registryService.getApps();
 
-    setInterval(function () {
+    if (me.useML) {
+      var p; // timeout handle
+      document.onmousemove = function (e: any) {
+        clearTimeout(p);
+        var process = me.pmService.getActiveProcess();
+        if (!process) {
+          return;
+        }
+        var pos = me.warpgateService.predict({
+          time: (new Date).getTime(),
+          position: [e.pageX, e.pageY]
+        });
+        process.worker.postMessage({
+          msg: 'mousemove',
+          payload: {
+            id: 0,
+            x: pos.position[0],
+            y: pos.position[1]
+          }
+        });
+        p = setTimeout(function () {
+          for (var i = 0; i < 6; i++) {
+            var pos = me.warpgateService.predict({
+              time: (new Date).getTime(),
+              position: [e.pageX, e.pageY]
+            });
+            process.worker.postMessage({
+              msg: 'mousemove',
+              payload: {
+                id: 0,
+                x: pos.position[0],
+                y: pos.position[1]
+              }
+            });
+          }
+        }, 20);
+      };
+    } else {
+      document.onmousemove = function (e: any) {
+        var process = me.pmService.getActiveProcess();
+        if (!process) {
+          return;
+        }
+        process.worker.postMessage({
+          msg: 'mousemove',
+          payload: {
+            id: 0,
+            x: e.pageX,
+            y: e.pageY
+          }
+        });
+      };
+    }
 
-    });
-    var p; // timeout handle
-    document.onmousemove = function (e: any) {
-      clearTimeout(p);
-      var process = me.pmService.getActiveProcess();
-      if (!process) {
-        return;
-      }
-      var pos = me.warpgateService.predict({
-        time: (new Date).getTime(),
-        position: [e.pageX, e.pageY]
-      });
-      process.worker.postMessage({
-        msg: 'mousemove',
-        payload: {
-          id: 0,
-          x: pos.position[0],
-          y: pos.position[1]
-        }
-      });
-      p = setTimeout(function () {
-        for (var i = 0; i < 6; i++) {
-          var pos = me.warpgateService.predict({
-            time: (new Date).getTime(),
-            position: [e.pageX, e.pageY]
-          });
-          process.worker.postMessage({
-            msg: 'mousemove',
-            payload: {
-              id: 0,
-              x: pos.position[0],
-              y: pos.position[1]
-            }
-          });
-        }
-      }, 20);
-    };
     document.onmousedown = function (e: any) {
       var process = me.pmService.getActiveProcess();
       if (!process) {
