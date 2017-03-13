@@ -52,7 +52,7 @@ export class WindowComponent implements AfterViewInit {
       if (this.window.width != 0 && this.window.height != 0 && this.window.width < 10000) // < 10000 forbit to create window with size 65535x65535
         this.imageData = canvas.getContext('2d').createImageData(this.window.width, this.window.height);
     }
-    
+    /*
     interact('#wd-' + this.window.id + ' .top').draggable({
       onmove: function(event: any) {
         var target = event.target.parentNode.parentNode.parentNode, x = (parseFloat(target.style.left) || 0) + event.dx, y = (parseFloat(target.style.top) || 0) + event.dy;
@@ -87,7 +87,7 @@ export class WindowComponent implements AfterViewInit {
 
       target.setAttribute('data-resize-x', x);
       target.setAttribute('data-resize-y', y);
-    });
+    });*/
   }
 
   close() {

@@ -13,7 +13,9 @@ export class WmService {
 
   createWindow(opts: any): Promise<Window> {
     let window = new Window(opts);
-    window.id = Math.floor(Math.random() * 10000);
+    if (!window.id)
+      window.id = Math.floor(Math.random() * 10000);
+    
     window.zIndex = this.zIndex++;
     this.windows.push(window);
     return Promise.resolve(window);
@@ -21,13 +23,14 @@ export class WmService {
 
   showWindow(window: Window): Promise<Window> {
     window.visible = true;
+    console.log(window);
     return Promise.resolve(window);
   }
 
   destroyWindow(window: Window) {
     for (var i in this.windows) {
       if (window == this.windows[i]) {
-        if (this.windows[i].process)
+        if (this.windows[i].process && this.windows[i].process.worker)
           this.windows[i].process.worker.postMessage({msg: 'destroy', payload: this.windows[i].id});
         this.windows.splice(parseInt(i), 1);
         break;

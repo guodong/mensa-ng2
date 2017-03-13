@@ -5,6 +5,7 @@ import {Process} from './process';
 import {DatastoreService} from "./datastore.service";
 import {Instance, User, Version} from "./models";
 import {SessiongManagerService} from "./session-manager.service";
+import {SessionService} from "./session.service";
 
 @Injectable()
 export class ProcessManagerService {
@@ -12,7 +13,8 @@ export class ProcessManagerService {
   processes: Process[] = [];
   zone: NgZone;
 
-  constructor(private wmService: WmService, private dsService: DatastoreService, private smService: SessiongManagerService) {
+  constructor(private wmService: WmService, private dsService: DatastoreService, private smService: SessiongManagerService,
+              private sessService: SessionService) {
     this.zone = new NgZone({enableLongStackTrace: false});
   }
 
@@ -98,10 +100,44 @@ export class ProcessManagerService {
       return this.wmService.showWindow(window)
     });
   }
+  
+  randomIntFromInterval(min,max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
+
 
   run(app: App) {
     var me = this;
     
+    /* test */
+
+    this.showLoading().then((loadingWindow) => {
+      setTimeout(function () {
+        me.wmService.destroyWindow(loadingWindow);
+      }, 12000);
+    });
+    var port = me.randomIntFromInterval(10000, 30000);
+    var display = me.randomIntFromInterval(10, 10000);
+    me.sessService.send(JSON.stringify({
+      request: 'run',
+      payload: 'sudo docker run -ti -d --net host --privileged -e "DISPLAY=:' + display + '" -e "PORT=' + port + '" -e APP=gedit cloudwarehouse/demo'
+    }));
+    setTimeout(function(){
+      var process = new Process({
+        pid: me.pid++,
+        entry: '/assets/js/cloudware.js',
+        app: app,
+        instance: null,
+        token: 123,
+        port: port
+      });
+      me.processes.push(process);
+      me.activeProcess(process);
+    }, 5000);
+    
+    return;
+    /* /test */
+    /*
     this.showLoading().then((loadingWindow) => {
       
       if (app.type == 'cloudware') {
@@ -147,7 +183,7 @@ export class ProcessManagerService {
         }
       }
     });
-
+*/
   }
   
   private makeSrc(src: string, proc: Process) {
@@ -248,7 +284,7 @@ export class ProcessManagerService {
               content: payload.content || '',
               process: process,
               type: payload.type || 'normal',
-              bare: payload.bare || false,
+              bare: true,//payload.bare || false,
               src: this.makeSrc(payload.src, process) || null
             };
             this.zone.run(() => {

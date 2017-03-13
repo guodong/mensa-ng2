@@ -18,6 +18,8 @@ import {ProcessManagerService} from './process-manager.service';
 import {DatastoreService} from './datastore.service';
 import {SessiongManagerService} from "./session-manager.service";
 import {WarpgateService} from "./warpgate.service";
+import {ProcessComponent} from "./process.component";
+import {SessionService} from "./session.service";
 
 enableProdMode();
 @NgModule({
@@ -34,6 +36,7 @@ enableProdMode();
     StartmenuComponent,
     DesktopIconItemComponent,
     TaskbarIconItemComponent,
+    ProcessComponent,
     SafeHtmlPipe,
     SafeUrlPipe,
   ],
@@ -45,6 +48,7 @@ enableProdMode();
     DatastoreService,
     SessiongManagerService,
     WarpgateService,
+    SessionService,
   ],
   bootstrap: [AppComponent]
 })

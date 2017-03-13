@@ -1,6 +1,6 @@
 
 
-<div class="window-layout" *ngIf="!window.bare">
+<div class="window-layout" [style.display]="window.bare?'none':'block'">
     <div class="top-row">
         <div class="top">
             <div class="buttons">
@@ -19,4 +19,4 @@
 
 </div>
 
-<canvas #canvas *ngIf="window.bare" width="1" height="1"></canvas>
+<canvas #canvas width="1" height="1"></canvas>

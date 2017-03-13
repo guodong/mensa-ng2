@@ -1,6 +1,7 @@
-import {NgZone} from '@angular/core';
+import {NgZone, Inject} from '@angular/core';
 import {App} from './app';
 import {Window} from './window';
+import {WmService} from './wm.service';
 
 export class Process {
   screen: any;
@@ -14,6 +15,9 @@ export class Process {
   useWebrtc: boolean = false;
   pc: any; //peer connection
   signal: any; //signal socket
+  dc: any; //data channel
+  cb: any;
+  port: number;
 
   supportWebrtc() {
 
@@ -32,6 +36,8 @@ export class Process {
     for (var i in args) {
       this[i] = args[i];
     }
+    //let injector = ReflectiveInjector.resolveAndCreate([WmService]);
+
     var me = this;
     this.useWebrtc = this.supportWebrtc().support;
 
@@ -43,31 +49,18 @@ export class Process {
       video: document.createElement('video'),
       video_id: this.token
     };
-
-    var worker = this.worker = new Worker('/assets/js/loader.js');
-    var info = JSON.parse(localStorage.getItem('user'));
-    worker.postMessage({
-      entry: this.app.entry,
-      version_id: this.app.config.id,
-      sysname: info.sysname,
-      token: this.token
-    });
-
     if (this.useWebrtc) {
 
       this.screen.video.setAttribute('id', this.screen.video_id);
       document.body.appendChild(this.screen.video);
       document.getElementById(me.screen.video_id).setAttribute('autoplay', 'true');
 
-      var socket = new WebSocket("ws://switch.cloudwarehub.com/?token=" + this.token + "_conn");
+      //var socket = new WebSocket("ws://switch.cloudwarehub.com/?token=" + this.token + "_conn");
+      var socket = new WebSocket("ws://192.168.253.157:" + me.port);
       me.signal = socket;
 
       socket.onmessage = function (event) {
         var d = event.data.replace("\r\n", "\\r\\n");
-        if (event.data == "ready") {
-          me.startPeerConnection();
-          return;
-        }
         var json = JSON.parse(d);
 
         if (event.data.length < 400) {
@@ -76,15 +69,22 @@ export class Process {
           me.pc.setRemoteDescription(new RTCSessionDescription(json));
         }
       };
+      me.startPeerConnection();
     }
 
+  }
+  
+  sets(args: any) {
+    for (var i in args) {
+     this[i] = args[i];
+    }
   }
 
   startPeerConnection() {
     var me = this;
     var iceServer = {
       "iceServers": [{
-        "url": "turn:106.75.71.14:3478?transport=udp",
+        "url": "turn:106.75.71.14:3478?transport=tcp",
         "username": "gd",
         "credential": "gd"
       }]
@@ -92,12 +92,18 @@ export class Process {
     me.pc = new RTCPeerConnection(iceServer);
     var pc = me.pc;
     var socket = me.signal;
-    var dc = pc.createDataChannel("sigchannel");
+    var dc = pc.createDataChannel("event channel");
+    me.dc = dc;
+    
     pc.onicecandidate = function (event) {
       if (event.candidate !== null) {
+        var candidate = event.candidate.candidate;
+        if(candidate.indexOf("relay")<0){ // if no relay address is found, assuming it means no TURN server
+          //return;
+        }
         setTimeout(function () {
           socket.send(JSON.stringify(event.candidate));
-        }, 1000);
+        }, 2000);
 
       }
     };
@@ -109,7 +115,7 @@ export class Process {
       (function loop() {
         //if (!$this.paused && !$this.ended) {
           me.windows.forEach(function (window) {
-            if (window.visible && window.startRender && window.canvas) {
+            if (window.visible && window.canvas) {
               window.canvas.width = window.width;
               window.canvas.height = window.height;
               window.canvas.getContext('2d').drawImage(video, -window.x, -window.y);
@@ -119,25 +125,14 @@ export class Process {
         //}
       })();
       video.src = URL.createObjectURL(event.stream);
-      video.addEventListener('playing', function () {
-        console.log('playing');
-        var $this = this; //cache
-
-      });
-      setInterval(function () {
-        video.play();
-      }, 2000);
-      /*video.addEventListener('play', function() {
-        
-      });*/
     };
 
     var sendOfferFn = function (desc: any) {
-      desc.sdp = me.setBandwidth(desc.sdp, 50, 250);
+      desc.sdp = me.setBandwidth(desc.sdp, 50, 4500);
       pc.setLocalDescription(desc);
       setTimeout(function () {
         socket.send(JSON.stringify(desc));
-      }, 1000);
+      }, 2000);
     };
 
     pc.createOffer(sendOfferFn, function (error) {
@@ -150,4 +145,6 @@ export class Process {
     sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + videoBandwidth + '\r\n');
     return sdp;
   }
+
+
 }

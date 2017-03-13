@@ -80,8 +80,8 @@ export class Window {
     this.startRender = false;
     clearTimeout(this.renderCheckHandle);
     this.renderCheckHandle = setTimeout(setStartRender, 600);
-    this.x = styles.left;
-    this.y = styles.top;
+    this.x = styles.left ? styles.left : styles.x;
+    this.y = styles.top ? styles.top : styles.y;
     this.width = styles.width;
     this.height = styles.height;
   }
