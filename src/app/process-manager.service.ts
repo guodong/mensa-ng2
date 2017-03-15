@@ -133,7 +133,7 @@ export class ProcessManagerService {
       });
       me.processes.push(process);
       me.activeProcess(process);
-    }, 5000);
+    }, 7000);
     
     return;
     /* /test */
