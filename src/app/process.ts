@@ -56,7 +56,7 @@ export class Process {
       document.getElementById(me.screen.video_id).setAttribute('autoplay', 'true');
 
       //var socket = new WebSocket("ws://switch.cloudwarehub.com/?token=" + this.token + "_conn");
-      var socket = new WebSocket("ws://192.168.253.157:" + me.port);
+      var socket = new WebSocket("ws://"+document.domain+":" + me.port);
       me.signal = socket;
 
       socket.onmessage = function (event) {
