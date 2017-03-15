@@ -1,0 +1,10 @@
+window {
+    .opacity(0.95);
+    position: absolute;
+    border-collapse: collapse;
+    top: 0px;
+    left: 0px;
+    overflow: visible;
+    background: #fff;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.6);
+}

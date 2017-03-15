@@ -1,0 +1,11 @@
+{
+  "name": "Gedit demo",
+  "description": "",
+  "version": "0.0.1",
+  "authors": [
+    "guodong <gd@tongjo.com>"
+  ],
+  "license": "ISC",
+  "icon": "icon.png",
+  "entry": "entry.js"
+}
